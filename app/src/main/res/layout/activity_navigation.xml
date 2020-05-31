@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:mapbox_cameraTargetLat="27.7084"
+        mapbox:mapbox_cameraTargetLng="85.3206"
+        mapbox:mapbox_cameraZoom="13"
+        />
+
+    <LinearLayout
+        android:id="@+id/bottomInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorAccent"
+        android:gravity="center_vertical"
+        android:padding="@dimen/medium_margin"
+        android:visibility="gone"
+        android:weightSum="1"
+        app:layout_anchor="@id/mapView"
+        app:layout_anchorGravity="bottom">
+
+        <TextView
+            android:id="@+id/bottomText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.8"
+            android:drawableLeft="@drawable/ic_error_outline_black_24dp"
+            android:drawablePadding="@dimen/normal_margin"
+            android:gravity="center_vertical"
+            android:text="@string/navigation_msg"
+            android:textColor="@color/colorWhite" />
+
+        <Button
+            android:id="@+id/btnGo"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:paddingRight="@dimen/small_margin"
+            android:text="Start"
+            android:visibility="gone"
+            android:background="@color/cardview_light_background"
+            android:textColor="@color/colorPrimaryDark" />
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="general_margin">16dp</dimen>
+    <dimen name="large_margin">24dp</dimen>
+    <dimen name="circle_size">20dp</dimen>
+    <dimen name="medium_margin">12dp</dimen>
+    <dimen name="medium_text_size">15sp</dimen>
+    <dimen name="small_margin">5dp</dimen>
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="edit_box_height">45dp</dimen>
+    <dimen name="normal_view_height">56dp</dimen>
+</resources>
