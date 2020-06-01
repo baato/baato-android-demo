@@ -7,35 +7,29 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.baatoandroiddemo.R;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.kathmandulivinglabs.baatolibrary.models.LatLon;
 import com.kathmandulivinglabs.baatolibrary.models.Place;
 import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
 import com.kathmandulivinglabs.baatolibrary.services.BaatoReverse;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
-import static android.view.View.GONE;
-
-public class ReverseGeoCodeActivity extends AppCompatActivity {
-    private static String TAG = "ReverseGeoCodeActivity";
+/**
+ * Click and put a marker at a specific location and then perform
+ * reverse geocoding to retrieve and display the location's address
+ */
+public class LocationPickerActivity extends AppCompatActivity {
     private MapView mapView;
     private TextView bottomInfoLayout;
     private MapboxMap mapboxMap;
@@ -45,21 +39,25 @@ public class ReverseGeoCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reverse_geo_code);
+        setContentView(R.layout.activity_location_picker);
         mapView = findViewById(R.id.mapView);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(mapboxMap -> mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token), style -> {
-            mapView.setVisibility(View.VISIBLE);
-            setupMap(mapboxMap);
-            bottomInfoLayout.setVisibility(View.VISIBLE);
-        }));
+        mapView.getMapAsync(mapboxMap ->
+                //add your map style url here
+                mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                        style -> {
+                            this.mapboxMap = mapboxMap;
+                            mapView.setVisibility(View.VISIBLE);
+                            initClickedMarker(mapboxMap);
+                            bottomInfoLayout.setVisibility(View.VISIBLE);
+                        }));
     }
 
-    private void setupMap(MapboxMap mapboxMap) {
-        this.mapboxMap = mapboxMap;
+    // Initialize, but don't show, a symbol for the marker icon which will represent a selected location.
+    private void initClickedMarker(MapboxMap mapboxMap) {
         Drawable drawabled = ResourcesCompat.getDrawable(getResources(), R.drawable.mapbox_marker_icon_default, null);
         Bitmap dBitmap = BitmapUtils.getBitmapFromDrawable(drawabled);
         assert dBitmap != null;
@@ -71,6 +69,7 @@ public class ReverseGeoCodeActivity extends AppCompatActivity {
         });
     }
 
+    //update tapped marker position
     private void updateMarkerPosition(LatLng point) {
         if (marker == null) {
             marker = new MarkerOptions().icon(selectedMarkerIcon).position(point);
@@ -81,20 +80,28 @@ public class ReverseGeoCodeActivity extends AppCompatActivity {
             mapboxMap.updateMarker(marker);
         }
 
+        // Use the tapped coordinates to make a reverse geocoding search
         getAddressFromLibrary(point);
     }
 
-    private void getAddressFromLibrary(LatLng position) {
+    /**
+     * This method is used to perform reverse geocode where the user has tapped on the map.
+     *
+     * @param point The location to use for the search
+     */
+    private void getAddressFromLibrary(LatLng point) {
         new BaatoReverse(this)
-                .setLatLon(new LatLon(position.getLatitude(), position.getLongitude()))
+                .setLatLon(new LatLon(point.getLatitude(), point.getLongitude()))
                 .setAccessToken(getString(R.string.baato_access_token))
                 .setRadius(2)
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
+
+                        // If the geocoder returns a result, we take the first in the list and show the address with the place name.
                         if (!places.getData().isEmpty()) {
-                            Place place=places.getData().get(0);
-                            bottomInfoLayout.setText(Html.fromHtml("<b><h6>"+place.getName()+"</h6></b>"+place.getAddress()));
+                            Place place = places.getData().get(0);
+                            bottomInfoLayout.setText(Html.fromHtml("<b><h6>" + place.getName() + "</h6></b>" + place.getAddress()));
                         } else {
                             bottomInfoLayout.setText("No address found!");
                         }

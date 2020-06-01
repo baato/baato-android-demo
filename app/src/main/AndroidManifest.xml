@@ -16,17 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.RetroMapStyleActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".activities.RetroMapStyleActivity"/>
         <activity
-            android:name=".activities.MonochromeMapStyleActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".activities.MonochromeMapStyleActivity"/>
         <activity
-            android:name=".activities.ReverseGeoCodeActivity"
-            android:screenOrientation="portrait" />
+            android:name=".activities.LocationPickerActivity"/>
         <activity
-            android:name=".activities.SearchActivity"
-            android:screenOrientation="portrait" />
+            android:name=".activities.SearchActivity"/>
+<!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".activities.NavigationActivity"
             android:screenOrientation="portrait" />

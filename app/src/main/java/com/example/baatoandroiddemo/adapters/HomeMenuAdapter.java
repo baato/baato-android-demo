@@ -15,9 +15,8 @@ import com.example.baatoandroiddemo.R;
 import com.example.baatoandroiddemo.activities.MonochromeMapStyleActivity;
 import com.example.baatoandroiddemo.activities.RetroMapStyleActivity;
 import com.example.baatoandroiddemo.activities.NavigationActivity;
-import com.example.baatoandroiddemo.activities.ReverseGeoCodeActivity;
+import com.example.baatoandroiddemo.activities.LocationPickerActivity;
 import com.example.baatoandroiddemo.activities.SearchActivity;
-import com.example.baatoandroiddemo.interfaces.MapStyles;
 import com.example.baatoandroiddemo.models.HomeMenu;
 
 import java.util.List;
@@ -98,7 +97,7 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 break;
             case 1:
-                intent = new Intent(context, ReverseGeoCodeActivity.class);
+                intent = new Intent(context, LocationPickerActivity.class);
                 break;
             case 2:
                 intent = new Intent(context, NavigationActivity.class);

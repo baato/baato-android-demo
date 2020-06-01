@@ -26,6 +26,10 @@ import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
 
 import static android.view.View.GONE;
 
+/**
+ * Type your query and then perform
+ * search to retrieve the list of places
+ */
 public class SearchActivity extends AppCompatActivity {
     EditText etSearch;
     TextView errorMessage;
@@ -92,6 +96,12 @@ public class SearchActivity extends AppCompatActivity {
         imm.showSoftInput(etSearch, InputMethodManager.SHOW_IMPLICIT);
     }
 
+
+    /**
+     * This method is used to perform search where the user inputs any query address.
+     *
+     * @param query The query to use for the search
+     */
     private void searchTheQuery(String query) {
         recyclerView.setVisibility(GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -101,7 +111,7 @@ public class SearchActivity extends AppCompatActivity {
                 .withListener(new BaatoSearch.BaatoSearchRequestListener() {
                     @Override
                     public void onSuccess(SearchAPIResponse places) {
-                        // get the list of search results here
+                        // get the list of search results and add it to the recycler view adapter
                         if (places.getData() != null && places.getData().size() > 0) {
                             hideErrorMessage();
                             recyclerView.setAdapter(new SearchAdapter(places.getData(), SearchActivity.this));

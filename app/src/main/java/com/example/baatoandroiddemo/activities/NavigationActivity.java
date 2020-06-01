@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -121,15 +120,17 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
 
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token), style -> {
-            this.mapboxMap = mapboxMap;
-            initLocationEngine();
-            initLocationLayer();
-            setUpMarkers();
-            mapboxMap.addOnMapClickListener(point -> {
-                onMapClick(point);
-            });
-        }));
+        mapView.getMapAsync(mapboxMap ->
+                mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                        style -> {
+                            this.mapboxMap = mapboxMap;
+                            initLocationEngine();
+                            initLocationLayer();
+                            setUpMarkers();
+                            mapboxMap.addOnMapClickListener(point -> {
+                                onMapClick(point);
+                            });
+                        }));
     }
 
     private void initLocationLayer() {
@@ -170,6 +171,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
 
     }
 
+    // this method is used to add and update marker for start point.
     private void addOriginMarker(LatLng latLng) {
         if (mapboxMap.getMarkers().isEmpty()) {
             marker = new MarkerOptions().icon(startIcon).position(new LatLng(originPoint.latitude(), originPoint.longitude()));
@@ -182,6 +184,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         }
     }
 
+    // this method is used to add and update marker for destination point.
     private void addDestinationMarker(LatLng point) {
         if (mapboxMap.getMarkers().size() == 2) {
             Marker marker = mapboxMap.getMarkers().get(1);
@@ -276,18 +279,14 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                                     permissionLocation1 = checkSelfPermission(
                                             Manifest.permission.ACCESS_FINE_LOCATION);
                                 }
-                                Log.d(TAG, "getMyLocation: up");
                                 if (permissionLocation1 == PackageManager.PERMISSION_GRANTED) {
-                                    Log.d(TAG, "getMyLocation: +granted");
 
                                     mylocation = LocationServices.FusedLocationApi
                                             .getLastLocation(googleApiClient);
-                                    Log.d(TAG, "getMyLocation: +my"+mylocation);
                                     if (mylocation != null) {
                                         originPoint = Point.fromLngLat(mylocation.getLongitude(), mylocation.getLongitude());
                                         addOriginMarker(new LatLng(mylocation.getLatitude(), mylocation.getLongitude()));
                                         getAddressFromLibrary(new LatLng(mylocation.getLatitude(), mylocation.getLongitude()), "start");
-                                        Log.d(TAG, "getMyLocation:my " + mylocation.getLatitude() + mylocation.getLongitude());
                                     }
                                 }
 
@@ -304,6 +303,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         } else setUpGClient();
     }
 
+    //initialize icons for markers of start point and destination point
     private void setUpMarkers() {
         IconFactory mIconFactory = IconFactory.getInstance(this);
         Drawable drawables = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_circle_stroke, null);
@@ -318,6 +318,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         destinationIcon = mIconFactory.fromBitmap(dBitmap);
     }
 
+    /**
+     * This method is used to handle on Map clicked event.
+     *
+     * @param point The point to add marker as destination point
+     */
     public void onMapClick(LatLng point) {
         try {
             btnGo.setVisibility(View.GONE);
@@ -326,6 +331,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
             if (originPoint != null && destinationPoint != null) {
                 getRoute(originPoint, destinationPoint, navMode);
             }
+            //to get address of a tapped point
             getAddressFromLibrary(point, "destination");
         } catch (Exception e) {
         }
@@ -350,17 +356,23 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         }
     }
 
-    private void getAddressFromLibrary(LatLng position, String point) {
+    /**
+     * This method is used to perform reverse geocode where the user has tapped on the map.
+     *
+     * @param point The location to use for the search
+     */
+    private void getAddressFromLibrary(LatLng point, String marker) {
         new BaatoReverse(this)
-                .setLatLon(new LatLon(position.getLatitude(), position.getLongitude()))
+                .setLatLon(new LatLon(point.getLatitude(), point.getLongitude()))
                 .setAccessToken(getString(R.string.baato_access_token))
                 .setRadius(2)
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
+                        // If the geocoder returns a result, we take the first in the list and show the address with the place name.
                         if (!places.getData().isEmpty()) {
                             Place place = places.getData().get(0);
-                            addSnippet(point, place);
+                            addSnippetToMarker(marker, place);
                         } else {
                             bottomText.setText("No address found!");
                         }
@@ -374,7 +386,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                 .doRequest();
     }
 
-    private void addSnippet(String point, Place place) {
+    private void addSnippetToMarker(String point, Place place) {
         if (point.contains("start")) {
             Marker start = mapboxMap.getMarkers().get(0);
             start.setSnippet(place.getName() + "\n" + place.getAddress());
@@ -386,7 +398,13 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         }
     }
 
-
+    /**
+     * This method is used to perform routing between two points.
+     *
+     * @param origin      The location to use as a start point
+     * @param destination The location to use as a destination point
+     * @param navigationMode The mode used default is car
+     */
     private void getRoute(Point origin, Point destination, String navigationMode) {
         String[] points = new String[2];
         points[0] = origin.latitude() + "," + origin.longitude();
@@ -401,6 +419,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                 .withListener(new BaatoRouting.BaatoRoutingRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
+                        // If the routing returns a result, we take the first in the list and show the route.
                         com.kathmandulivinglabs.baatolibrary.models.NavResponse navResponse = directionResponse.getData().get(0);
                         initRouteCoordinates(navResponse.getEncoded_polyline());
                         double distanceInKm = navResponse.getDistanceInMeters() / 1000;
@@ -419,18 +438,12 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                         navMapRoute(currentRoute);
 
                         btnGo.setOnClickListener(v -> {
-                            boolean simulateRoute = false;
+                            //start Navigation
                             Intent intent = new Intent(NavigationActivity.this, MockNavigationActivity.class);
                             intent.putExtra("Route", directionsResponse);
                             intent.putExtra("origin", origin);
                             intent.putExtra("lastLocation", mylocation);
                             startActivity(intent);
-                            //this is the actual library method
-//                            NavigationLauncherOptions options = NavigationLauncherOptions.builder()
-//                                    .directionsRoute(currentRoute)
-//                                    .shouldSimulateRoute(simulateRoute)
-//                                    .build();
-//                            NavigationLauncher.startNavigation(NavigationActivity.this, options);
                         });
                     }
 
@@ -480,9 +493,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), animationTime);
     }
 
-    private LatLng giveMeLatLong(Point originPoint) {
-        return new LatLng(originPoint.latitude(), originPoint.longitude());
-    }
 
     @Override
     public void onConnected() {
@@ -494,7 +504,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         originPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
         mylocation = location;
         addOriginMarker(new LatLng(location.getLatitude(), location.getLongitude()));
-//        mapboxMap.addMarker(startPoint);
     }
 
     @Override

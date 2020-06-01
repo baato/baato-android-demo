@@ -27,10 +27,13 @@ public class RetroMapStyleActivity extends AppCompatActivity {
 
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token), style -> {
-            bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
-            bottomInfoLayout.setVisibility(View.VISIBLE);
-        }));
+        mapView.getMapAsync(mapboxMap ->
+                //add your map style url here
+                mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                        style -> {
+                            bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
+                            bottomInfoLayout.setVisibility(View.VISIBLE);
+                        }));
 
     }
 
