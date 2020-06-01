@@ -23,10 +23,8 @@
             android:name=".activities.LocationPickerActivity"/>
         <activity
             android:name=".activities.SearchActivity"/>
-<!--            android:screenOrientation="portrait" />-->
         <activity
-            android:name=".activities.NavigationActivity"
-            android:screenOrientation="portrait" />
+            android:name=".activities.NavigationActivity"/>
         <activity
             android:name=".activities.MockNavigationActivity"
             android:screenOrientation="portrait" />

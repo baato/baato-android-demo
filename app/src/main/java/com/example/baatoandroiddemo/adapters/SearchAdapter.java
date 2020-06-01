@@ -13,10 +13,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.baatoandroiddemo.R;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
-import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.SearchDataModel;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoPlace;
+import com.baato.baatolibrary.models.Place;
+import com.baato.baatolibrary.models.PlaceAPIResponse;
+import com.baato.baatolibrary.models.SearchDataModel;
+import com.baato.baatolibrary.services.BaatoPlace;
 
 import java.util.List;
 

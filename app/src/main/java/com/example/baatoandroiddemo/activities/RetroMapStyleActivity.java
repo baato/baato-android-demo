@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.baatoandroiddemo.R;
-import com.example.baatoandroiddemo.interfaces.MapStyles;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-
+/**
+ * input the baato retro map style url and load with mapbox
+ */
 public class RetroMapStyleActivity extends AppCompatActivity {
     private MapView mapView;
     private TextView bottomInfoLayout;

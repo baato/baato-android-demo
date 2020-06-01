@@ -21,8 +21,8 @@ import androidx.transition.TransitionManager;
 
 import com.example.baatoandroiddemo.R;
 import com.google.android.material.snackbar.Snackbar;
-import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoRouting;
+import com.baato.baatolibrary.models.DirectionsAPIResponse;
+import com.baato.baatolibrary.services.BaatoRouting;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -132,7 +132,7 @@ public class MockNavigationActivity extends AppCompatActivity implements OnMapRe
         // For styling the InstructionView
         setTheme(R.style.CustomInstructionView);
         setContentView(R.layout.activity_component_navigation);
-        Mapbox.getInstance(getApplicationContext(), "pk.xxx");
+        Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_token));
 
         mapView = findViewById(R.id.mapView);
         navigationLayout = findViewById(R.id.componentNavigationLayout);
@@ -153,11 +153,10 @@ public class MockNavigationActivity extends AppCompatActivity implements OnMapRe
 
         // Will call onMapReady
         mapView.getMapAsync(this);
-//        CustomNavigationNotification customNotification = new CustomNavigationNotification(this);
-//        .navigationNotification(customNotification)
+
         MapboxNavigationOptions options = MapboxNavigationOptions.builder()
                 .build();
-        navigation = new MapboxNavigation(this, "pk.xxx", options);
+        navigation = new MapboxNavigation(this, getString(R.string.mapbox_token), options);
         navigation.addMilestone(new RouteMilestone.Builder()
                 .setIdentifier(BEGIN_ROUTE_MILESTONE)
                 .setInstruction(new BeginRouteInstruction())
@@ -168,7 +167,6 @@ public class MockNavigationActivity extends AppCompatActivity implements OnMapRe
                                 Trigger.gte(TriggerProperty.STEP_DISTANCE_TRAVELED_METERS, 75)
                         )
                 ).build());
-//        customNotification.register(new MyBroadcastReceiver(navigation), this);
     }
 
     private static class BeginRouteInstruction extends Instruction {
@@ -416,7 +414,7 @@ public class MockNavigationActivity extends AppCompatActivity implements OnMapRe
                 .withListener(new BaatoRouting.BaatoRoutingRequestListener() {
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
-                        com.kathmandulivinglabs.baatolibrary.models.NavResponse navResponse = directionResponse.getData().get(0);
+                        com.baato.baatolibrary.models.NavResponse navResponse = directionResponse.getData().get(0);
                         double distanceInKm = navResponse.getDistanceInMeters() / 1000;
                         long time = navResponse.getTimeInMs() / 1000;
 

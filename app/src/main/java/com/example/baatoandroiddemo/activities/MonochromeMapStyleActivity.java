@@ -11,6 +11,9 @@ import com.example.baatoandroiddemo.R;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
 
+/**
+ * input the baato monochrome map style url and load with mapbox
+ */
 public class MonochromeMapStyleActivity extends AppCompatActivity {
     private MapView mapView;
     private TextView bottomInfoLayout;

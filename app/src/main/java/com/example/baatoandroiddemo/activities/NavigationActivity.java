@@ -1,6 +1,7 @@
 package com.example.baatoandroiddemo.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.baato.baatolibrary.models.NavResponse;
 import com.example.baatoandroiddemo.R;
 import com.example.baatoandroiddemo.helpers.TimeCalculation;
 import com.example.baatoandroiddemo.interfaces.Constants;
@@ -33,12 +35,12 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.kathmandulivinglabs.baatolibrary.models.DirectionsAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.models.LatLon;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
-import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoReverse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoRouting;
+import com.baato.baatolibrary.models.DirectionsAPIResponse;
+import com.baato.baatolibrary.models.LatLon;
+import com.baato.baatolibrary.models.Place;
+import com.baato.baatolibrary.models.PlaceAPIResponse;
+import com.baato.baatolibrary.services.BaatoReverse;
+import com.baato.baatolibrary.services.BaatoRouting;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -70,12 +72,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static android.view.View.VISIBLE;
-import static com.kathmandulivinglabs.baatolibrary.utilities.BaatoUtil.decodePolyline;
+import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
 import static com.mapbox.android.core.location.LocationEnginePriority.LOW_POWER;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
 public class NavigationActivity extends AppCompatActivity implements LocationEngineListener, PermissionsListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -87,21 +86,15 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     Button btnGo;
     TextView bottomText;
 
-    // variables for adding location layer
-    private Point currentLocation;
-    private DirectionsRoute currentRoute, directionsRoute;
+    private DirectionsRoute currentRoute;
     private LocationLayerPlugin locationLayer;
     private LocationEngine locationEngine;
     private PermissionsManager permissionsManager;
-    //    private LocationComponent locationComponent;
-    private static final String TAG = "DirectionsActivity";
     private Location mylocation;
     private GoogleApiClient googleApiClient;
-    private String encodedPolyline, navMode = "car", styleUrl = "";
-    private ImageView[] optionButton;
+    private String navMode = "car";
     private static DecimalFormat df = new DecimalFormat("0.00");
-    private boolean showBottomNav = true;
-    private Point originPoint = null, destinationPoint = null, startPoint = null;
+    private Point originPoint = null, destinationPoint = null;
     private static final int CAMERA_ANIMATION_DURATION = 1000;
     private final int[] padding = new int[]{50, 100, 50, 120}; //left, top, right, bottom
     private NavigationMapRoute navigationMapRoute;
@@ -138,6 +131,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         locationLayer.setRenderMode(RenderMode.COMPASS);
     }
 
+    @SuppressLint("MissingPermission")
     private void initLocationEngine() {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
             locationEngine = new LocationEngineProvider(this).obtainBestLocationEngineAvailable();
@@ -147,16 +141,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
             locationEngine.addLocationEngineListener(this);
             locationEngine.activate();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
             if (locationEngine.getLastLocation() != null) {
                 Location lastLocation = locationEngine.getLastLocation();
                 onLocationChanged(lastLocation);
@@ -387,11 +371,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     }
 
     private void addSnippetToMarker(String point, Place place) {
-        if (point.contains("start")) {
+        if (!mapboxMap.getMarkers().isEmpty() && point.contains("start")) {
             Marker start = mapboxMap.getMarkers().get(0);
             start.setSnippet(place.getName() + "\n" + place.getAddress());
             mapboxMap.updateMarker(start);
-        } else if (point.contains("destination")) {
+        } else if (mapboxMap.getMarkers().size() > 1 && point.contains("destination")) {
             Marker dest = mapboxMap.getMarkers().get(1);
             dest.setSnippet(place.getName() + "\n" + place.getAddress());
             mapboxMap.updateMarker(dest);
@@ -401,8 +385,8 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     /**
      * This method is used to perform routing between two points.
      *
-     * @param origin      The location to use as a start point
-     * @param destination The location to use as a destination point
+     * @param origin         The location to use as a start point
+     * @param destination    The location to use as a destination point
      * @param navigationMode The mode used default is car
      */
     private void getRoute(Point origin, Point destination, String navigationMode) {
@@ -420,7 +404,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // If the routing returns a result, we take the first in the list and show the route.
-                        com.kathmandulivinglabs.baatolibrary.models.NavResponse navResponse = directionResponse.getData().get(0);
+                        NavResponse navResponse = directionResponse.getData().get(0);
                         initRouteCoordinates(navResponse.getEncoded_polyline());
                         double distanceInKm = navResponse.getDistanceInMeters() / 1000;
                         long time = navResponse.getTimeInMs() / 1000;

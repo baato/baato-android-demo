@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 import com.example.baatoandroiddemo.R;
 import com.example.baatoandroiddemo.adapters.SearchAdapter;
-import com.kathmandulivinglabs.baatolibrary.models.SearchAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoSearch;
+import com.baato.baatolibrary.models.SearchAPIResponse;
+import com.baato.baatolibrary.services.BaatoSearch;
 
 import static android.view.View.GONE;
 

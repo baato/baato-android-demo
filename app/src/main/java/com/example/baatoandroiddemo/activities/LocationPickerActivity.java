@@ -11,15 +11,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.baatoandroiddemo.R;
-import com.kathmandulivinglabs.baatolibrary.models.LatLon;
-import com.kathmandulivinglabs.baatolibrary.models.Place;
-import com.kathmandulivinglabs.baatolibrary.models.PlaceAPIResponse;
-import com.kathmandulivinglabs.baatolibrary.services.BaatoReverse;
+import com.baato.baatolibrary.models.LatLon;
+import com.baato.baatolibrary.models.Place;
+import com.baato.baatolibrary.models.PlaceAPIResponse;
+import com.baato.baatolibrary.services.BaatoReverse;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -64,9 +65,9 @@ public class LocationPickerActivity extends AppCompatActivity {
         IconFactory mIconFactory = IconFactory.getInstance(this);
         selectedMarkerIcon = mIconFactory.fromBitmap(dBitmap);
 
-        mapboxMap.addOnMapClickListener(point -> {
-            updateMarkerPosition(point);
-        });
+        //listen on map tapped events
+        mapboxMap.addOnMapClickListener(point ->
+                updateMarkerPosition(point));
     }
 
     //update tapped marker position
@@ -79,9 +80,15 @@ public class LocationPickerActivity extends AppCompatActivity {
             marker.setPosition(point);
             mapboxMap.updateMarker(marker);
         }
-
+        moveCameraTo(point);
         // Use the tapped coordinates to make a reverse geocoding search
         getAddressFromLibrary(point);
+    }
+
+    private void moveCameraTo(LatLng point) {
+        mapboxMap.animateCamera(
+                CameraUpdateFactory.newLatLng(point), 500
+        );
     }
 
     /**
