@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

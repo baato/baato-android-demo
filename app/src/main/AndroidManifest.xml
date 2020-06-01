@@ -16,20 +16,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.RetroMapStyleActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.RetroMapStyleActivity"/>
         <activity
-            android:name=".activities.MonochromeMapStyleActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.MonochromeMapStyleActivity"/>
         <activity
-            android:name=".activities.LocationPickerActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.LocationPickerActivity"/>
         <activity
-            android:name=".activities.SearchActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.SearchActivity"/>
         <activity
-            android:name=".activities.NavigationActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.NavigationActivity"/>
         <activity
-            android:name=".activities.MockNavigationActivity"
+            android:name="com.baato.baatoandroiddemo.activities.MockNavigationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.baato.baatoandroiddemo.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

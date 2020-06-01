@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.adapters;
+package com.baato.baatoandroiddemo.adapters;
 
 import android.content.Context;
 import android.util.Log;

@@ -1,19 +1,16 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.baato.baatoandroiddemo.models.HomeMenu;
 import com.example.baatoandroiddemo.R;
-import com.example.baatoandroiddemo.adapters.HomeMenuAdapter;
-import com.example.baatoandroiddemo.helpers.GridViewItemDecoration;
-import com.example.baatoandroiddemo.helpers.ItemOffsetDecoration;
-import com.example.baatoandroiddemo.helpers.VerticalSpaceItemDecoration;
-import com.example.baatoandroiddemo.models.HomeMenu;
+import com.baato.baatoandroiddemo.adapters.HomeMenuAdapter;
+import com.baato.baatoandroiddemo.helpers.ItemOffsetDecoration;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,20 +1,19 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.baatoandroiddemo.R;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
-
 /**
- * input the baato monochrome map style url and load with mapbox
+ * input the baato retro map style url and load with mapbox
  */
-public class MonochromeMapStyleActivity extends AppCompatActivity {
+public class RetroMapStyleActivity extends AppCompatActivity {
     private MapView mapView;
     private TextView bottomInfoLayout;
 
@@ -29,10 +28,10 @@ public class MonochromeMapStyleActivity extends AppCompatActivity {
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
-                //add you map style url here
-                mapboxMap.setStyle("http://baato.io/api/v1/styles/monochrome?key=" + getString(R.string.baato_access_token),
+                //add your map style url here
+                mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
                         style -> {
-                            bottomInfoLayout.setText(Html.fromHtml("<b>Monochrome Map</b>" + " from Baato.io"));
+                            bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
                             bottomInfoLayout.setVisibility(View.VISIBLE);
                         }));
 

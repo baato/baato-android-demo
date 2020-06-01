@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,20 +13,18 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.baato.baatoandroiddemo.interfaces.Constants;
 import com.baato.baatolibrary.models.NavResponse;
 import com.example.baatoandroiddemo.R;
-import com.example.baatoandroiddemo.helpers.TimeCalculation;
-import com.example.baatoandroiddemo.interfaces.Constants;
+import com.baato.baatoandroiddemo.helpers.TimeCalculation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

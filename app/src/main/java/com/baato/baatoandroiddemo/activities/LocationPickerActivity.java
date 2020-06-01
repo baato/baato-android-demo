@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;

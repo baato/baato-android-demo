@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/medium_margin"
-    tools:context=".activities.SearchActivity">
+    tools:context="com.baato.baatoandroiddemo.activities.SearchActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/searchLayout"

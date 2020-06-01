@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.models;
+package com.baato.baatoandroiddemo.models;
 
 public class HomeMenu {
     public static final int SERVICE_TYPE=0;

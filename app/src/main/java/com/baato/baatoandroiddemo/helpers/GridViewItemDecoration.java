@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.helpers;
+package com.baato.baatoandroiddemo.helpers;
 
 import android.content.Context;
 import android.content.res.TypedArray;

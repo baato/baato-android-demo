@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.activities;
+package com.baato.baatoandroiddemo.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -9,9 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,8 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baato.baatoandroiddemo.adapters.SearchAdapter;
 import com.example.baatoandroiddemo.R;
-import com.example.baatoandroiddemo.adapters.SearchAdapter;
 import com.baato.baatolibrary.models.SearchAPIResponse;
 import com.baato.baatolibrary.services.BaatoSearch;
 

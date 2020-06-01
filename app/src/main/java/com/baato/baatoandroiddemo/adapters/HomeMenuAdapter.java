@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.adapters;
+package com.baato.baatoandroiddemo.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baato.baatoandroiddemo.activities.MonochromeMapStyleActivity;
+import com.baato.baatoandroiddemo.activities.NavigationActivity;
+import com.baato.baatoandroiddemo.activities.RetroMapStyleActivity;
+import com.baato.baatoandroiddemo.activities.SearchActivity;
+import com.baato.baatoandroiddemo.models.HomeMenu;
 import com.example.baatoandroiddemo.R;
-import com.example.baatoandroiddemo.activities.MonochromeMapStyleActivity;
-import com.example.baatoandroiddemo.activities.RetroMapStyleActivity;
-import com.example.baatoandroiddemo.activities.NavigationActivity;
-import com.example.baatoandroiddemo.activities.LocationPickerActivity;
-import com.example.baatoandroiddemo.activities.SearchActivity;
-import com.example.baatoandroiddemo.models.HomeMenu;
+import com.baato.baatoandroiddemo.activities.LocationPickerActivity;
 
 import java.util.List;
 

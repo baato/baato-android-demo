@@ -1,4 +1,4 @@
-package com.example.baatoandroiddemo.interfaces;
+package com.baato.baatoandroiddemo.interfaces;
 
 public interface MapStyles {
     String MONOCHROME="Monochrome";
