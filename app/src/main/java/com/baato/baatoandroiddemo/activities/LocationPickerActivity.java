@@ -47,14 +47,19 @@ public class LocationPickerActivity extends AppCompatActivity {
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
-                //add your map style url here
-                mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
-                        style -> {
-                            this.mapboxMap = mapboxMap;
-                            mapView.setVisibility(View.VISIBLE);
-                            initClickedMarker(mapboxMap);
-                            bottomInfoLayout.setVisibility(View.VISIBLE);
-                        }));
+        {
+            //remove mapbox attribute
+            mapboxMap.getUiSettings().setAttributionEnabled(false);
+            mapboxMap.getUiSettings().setLogoEnabled(false);
+            //add your map style url here
+            mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                    style -> {
+                        this.mapboxMap = mapboxMap;
+                        mapView.setVisibility(View.VISIBLE);
+                        initClickedMarker(mapboxMap);
+                        bottomInfoLayout.setVisibility(View.VISIBLE);
+                    });
+        });
     }
 
     // Initialize, but don't show, a symbol for the marker icon which will represent a selected location.

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.baatoandroiddemo.R;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
+
 /**
  * input the baato retro map style url and load with mapbox
  */
@@ -28,12 +29,17 @@ public class RetroMapStyleActivity extends AppCompatActivity {
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
-                //add your map style url here
-                mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
-                        style -> {
-                            bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
-                            bottomInfoLayout.setVisibility(View.VISIBLE);
-                        }));
+        {
+            //remove mapbox attribute
+            mapboxMap.getUiSettings().setAttributionEnabled(false);
+            mapboxMap.getUiSettings().setLogoEnabled(false);
+            //add your map style url here
+            mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                    style -> {
+                        bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
+                        bottomInfoLayout.setVisibility(View.VISIBLE);
+                    });
+        });
 
     }
 

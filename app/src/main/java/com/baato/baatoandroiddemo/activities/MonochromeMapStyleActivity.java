@@ -29,12 +29,17 @@ public class MonochromeMapStyleActivity extends AppCompatActivity {
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
-                //add you map style url here
-                mapboxMap.setStyle("http://baato.io/api/v1/styles/monochrome?key=" + getString(R.string.baato_access_token),
-                        style -> {
-                            bottomInfoLayout.setText(Html.fromHtml("<b>Monochrome Map</b>" + " from Baato.io"));
-                            bottomInfoLayout.setVisibility(View.VISIBLE);
-                        }));
+        {
+            //remove mapbox attribute
+            mapboxMap.getUiSettings().setAttributionEnabled(false);
+            mapboxMap.getUiSettings().setLogoEnabled(false);
+            //add you map style url here
+            mapboxMap.setStyle("http://baato.io/api/v1/styles/monochrome?key=" + getString(R.string.baato_access_token),
+                    style -> {
+                        bottomInfoLayout.setText(Html.fromHtml("<b>Monochrome Map</b>" + " from Baato.io"));
+                        bottomInfoLayout.setVisibility(View.VISIBLE);
+                    });
+        });
 
     }
 

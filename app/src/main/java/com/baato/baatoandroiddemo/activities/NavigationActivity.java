@@ -112,16 +112,21 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         Mapbox.getInstance(this, getString(R.string.mapbox_token));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
-                mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
-                        style -> {
-                            this.mapboxMap = mapboxMap;
-                            initLocationEngine();
-                            initLocationLayer();
-                            setUpMarkers();
-                            mapboxMap.addOnMapClickListener(point -> {
-                                onMapClick(point);
-                            });
-                        }));
+        {
+            //remove mapbox attribute
+            mapboxMap.getUiSettings().setAttributionEnabled(false);
+            mapboxMap.getUiSettings().setLogoEnabled(false);
+            mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+                    style -> {
+                        this.mapboxMap = mapboxMap;
+                        initLocationEngine();
+                        initLocationLayer();
+                        setUpMarkers();
+                        mapboxMap.addOnMapClickListener(point -> {
+                            onMapClick(point);
+                        });
+                    });
+        });
     }
 
     private void initLocationLayer() {
