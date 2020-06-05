@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(new HomeMenu("Search", HomeMenu.SERVICE_TYPE, R.drawable.ic_search));
         list.add(new HomeMenu("Reverse", HomeMenu.SERVICE_TYPE, R.drawable.ic_choose_on_map));
         list.add(new HomeMenu("Navigation", HomeMenu.SERVICE_TYPE, R.drawable.ic_route));
+        list.add(new HomeMenu("Mock Navigation", HomeMenu.SERVICE_TYPE, R.drawable.ic_route));
 //        list.add(new HomeMenu("Map Styles", HomeMenu.SERVICE_TYPE, R.drawable.ic_map_black_24dp));
-        list.add(new HomeMenu("", HomeMenu.TEXT_TYPE, R.drawable.ic_search));
         list.add(new HomeMenu("Map Styles", HomeMenu.TEXT_TYPE, R.drawable.ic_search));
         list.add(new HomeMenu("", HomeMenu.TEXT_TYPE, R.drawable.ic_search));
 

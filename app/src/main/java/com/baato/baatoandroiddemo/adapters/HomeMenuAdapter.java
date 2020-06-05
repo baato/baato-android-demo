@@ -11,8 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baato.baatoandroiddemo.activities.ComponentNavigationActivity;
+import com.baato.baatoandroiddemo.activities.ComponentNavigationHelperActivity;
 import com.baato.baatoandroiddemo.activities.MonochromeMapStyleActivity;
-import com.baato.baatoandroiddemo.activities.NavigationActivity;
+import com.baato.baatoandroiddemo.activities.MockNavigationActivity;
 import com.baato.baatoandroiddemo.activities.RetroMapStyleActivity;
 import com.baato.baatoandroiddemo.activities.SearchActivity;
 import com.baato.baatoandroiddemo.models.HomeMenu;
@@ -100,9 +102,10 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 intent = new Intent(context, LocationPickerActivity.class);
                 break;
             case 2:
-                intent = new Intent(context, NavigationActivity.class);
+                intent = new Intent(context, ComponentNavigationActivity.class);
                 break;
             case 3:
+                intent = new Intent(context, MockNavigationActivity.class);
                 break;
             case 4:
                 break;

@@ -1,7 +1,6 @@
 package com.baato.baatoandroiddemo.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -21,10 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.baato.baatoandroiddemo.interfaces.Constants;
-import com.baato.baatolibrary.models.NavResponse;
-import com.example.baatoandroiddemo.R;
 import com.baato.baatoandroiddemo.helpers.TimeCalculation;
+import com.baato.baatoandroiddemo.interfaces.Constants;
+import com.baato.baatolibrary.models.DirectionsAPIResponse;
+import com.baato.baatolibrary.models.LatLon;
+import com.baato.baatolibrary.models.NavResponse;
+import com.baato.baatolibrary.models.Place;
+import com.baato.baatolibrary.models.PlaceAPIResponse;
+import com.baato.baatolibrary.services.BaatoReverse;
+import com.baato.baatolibrary.services.BaatoRouting;
+import com.example.baatoandroiddemo.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -33,15 +38,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.baato.baatolibrary.models.DirectionsAPIResponse;
-import com.baato.baatolibrary.models.LatLon;
-import com.baato.baatolibrary.models.Place;
-import com.baato.baatolibrary.models.PlaceAPIResponse;
-import com.baato.baatolibrary.services.BaatoReverse;
-import com.baato.baatolibrary.services.BaatoRouting;
 import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineListener;
-import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
@@ -57,10 +54,8 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.exceptions.InvalidLatLngBoundsException;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
-
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
@@ -72,9 +67,8 @@ import java.util.List;
 
 import static android.view.View.VISIBLE;
 import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
-import static com.mapbox.android.core.location.LocationEnginePriority.LOW_POWER;
 
-public class NavigationActivity extends AppCompatActivity implements LocationEngineListener, PermissionsListener, GoogleApiClient.ConnectionCallbacks,
+public class ComponentNavigationActivity extends AppCompatActivity implements PermissionsListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     private MapView mapView;
@@ -134,28 +128,13 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         locationLayer.setRenderMode(RenderMode.COMPASS);
     }
 
-    @SuppressLint("MissingPermission")
     private void initLocationEngine() {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            locationEngine = new LocationEngineProvider(this).obtainBestLocationEngineAvailable();
-            locationEngine.setPriority(LOW_POWER);
-            locationEngine.setInterval(0);
-            locationEngine.setFastestInterval(1000);
-            locationEngine.addLocationEngineListener(this);
-            locationEngine.activate();
-
-            if (locationEngine.getLastLocation() != null) {
-                Location lastLocation = locationEngine.getLastLocation();
-                onLocationChanged(lastLocation);
-                originPoint = Point.fromLngLat(lastLocation.getLongitude(), lastLocation.getLatitude());
-                addOriginMarker(new LatLng(originPoint.latitude(), originPoint.longitude()));
-                mylocation = lastLocation;
-            } else getMyLocation();
+            getMyLocation();
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
-
     }
 
     // this method is used to add and update marker for start point.
@@ -164,11 +143,25 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
             marker = new MarkerOptions().icon(startIcon).position(new LatLng(originPoint.latitude(), originPoint.longitude()));
             mapboxMap.addMarker(marker);
             bottomInfoLayout.setVisibility(VISIBLE);
+            moveCameraTo(latLng);
         } else {
             Marker marker = mapboxMap.getMarkers().get(0);
             marker.setPosition(latLng);
             mapboxMap.updateMarker(marker);
         }
+    }
+
+    private void moveCameraTo(LatLng point) {
+        double zoom = mapboxMap.getCameraPosition().zoom;
+        if (zoom < 10)
+            zoom = 13;
+        else if (zoom < 13)
+            zoom = 15;
+        else if (zoom < 15)
+            zoom = zoom + 1;
+        else if (zoom < 18)
+            zoom = zoom + 1;
+        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, zoom), 300);
     }
 
     // this method is used to add and update marker for destination point.
@@ -196,10 +189,9 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
 
     @Override
     public void onPermissionResult(boolean granted) {
-        if (!granted) {
-            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
-            finish();
-        }
+        if (granted)
+            Toast.makeText(this, "Please wait ...", Toast.LENGTH_LONG).show();
+        getMyLocation();
     }
 
     private synchronized void setUpGClient() {
@@ -210,16 +202,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                 .addApi(LocationServices.API)
                 .build();
         googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        getMyLocation();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
     }
 
     private void getMyLocation() {
@@ -426,10 +408,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
 
                         btnGo.setOnClickListener(v -> {
                             //start Navigation
-                            Intent intent = new Intent(NavigationActivity.this, MockNavigationActivity.class);
+                            Intent intent = new Intent(ComponentNavigationActivity.this, ComponentNavigationHelperActivity.class);
                             intent.putExtra("Route", directionsResponse);
                             intent.putExtra("origin", origin);
                             intent.putExtra("lastLocation", mylocation);
+                            intent.putExtra("destination", destination);
                             startActivity(intent);
                         });
                     }
@@ -437,7 +420,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
                     @Override
                     public void onFailed(Throwable t) {
                         if (t.getMessage() != null && t.getMessage().contains("Failed to connect"))
-                            Toast.makeText(NavigationActivity.this, "Please connect to internet to get the routes!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ComponentNavigationActivity.this, "Please connect to internet to get the routes!", Toast.LENGTH_SHORT).show();
 
                     }
                 })
@@ -480,12 +463,6 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
         mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), animationTime);
     }
 
-
-    @Override
-    public void onConnected() {
-
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         originPoint = Point.fromLngLat(location.getLongitude(), location.getLatitude());
@@ -518,6 +495,8 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     protected void onStart() {
         super.onStart();
         mapView.onStart();
+        if (locationLayer != null)
+            locationLayer.onStart();
     }
 
     @Override
@@ -530,6 +509,8 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     protected void onStop() {
         super.onStop();
         mapView.onStop();
+        if (locationLayer != null)
+            locationLayer.onStop();
     }
 
     @Override
@@ -553,6 +534,16 @@ public class NavigationActivity extends AppCompatActivity implements LocationEng
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        getMyLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 
     @Override

@@ -24,9 +24,14 @@
         <activity
             android:name="com.baato.baatoandroiddemo.activities.SearchActivity"/>
         <activity
-            android:name="com.baato.baatoandroiddemo.activities.NavigationActivity"/>
+            android:name="com.baato.baatoandroiddemo.activities.MockNavigationActivity"/>
         <activity
-            android:name="com.baato.baatoandroiddemo.activities.MockNavigationActivity"
+            android:name="com.baato.baatoandroiddemo.activities.MockNavigationHelperActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.baato.baatoandroiddemo.activities.ComponentNavigationActivity" />
+        <activity
+            android:name="com.baato.baatoandroiddemo.activities.ComponentNavigationHelperActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.baato.baatoandroiddemo.activities.MainActivity"

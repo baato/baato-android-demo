@@ -91,9 +91,16 @@ public class LocationPickerActivity extends AppCompatActivity {
     }
 
     private void moveCameraTo(LatLng point) {
-        mapboxMap.animateCamera(
-                CameraUpdateFactory.newLatLng(point), 500
-        );
+        double zoom = mapboxMap.getCameraPosition().zoom;
+        if (zoom < 10)
+            zoom = 13;
+        else if (zoom < 13)
+            zoom = 15;
+        else if (zoom < 15)
+            zoom = zoom + 1;
+        else if (zoom < 18)
+            zoom = zoom + 1;
+        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, zoom), 300);
     }
 
     /**
