@@ -20,3 +20,7 @@ This demo app uses Mapbox sdk to load maps, which require a Mapbox account and a
 <string name="mapbox_token">PASTE_YOUR_TOKEN_HERE</string>
 ```
 If you're still having issues, please feel free to contact us at support@baato.io.
+
+### Built With
+
+* [Mapbox](https://www.mapbox.com/) - Used to load maps.
