@@ -1,7 +1,7 @@
 # Baato Android Demo app
 ![Reverse API](/baato_splash.png)
 
-This is a public demo of the Baato App for Android. The demo app shows off the usages of the APIs [baato.io](http://baato.io/) offer.
+This is a public demo of the Baato App for Android. The demo app shows off the usages of the APIs [baato.io](http://baato.io/) offer with the use of our [java-client](https://github.com/baato/java-client) library.
 
 Visit [the overview page ](http://baato.io:8081/#/v1/libraries/java-client) to get started using the Baato library for Android in your Android project.
 
