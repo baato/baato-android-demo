@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baato.baatoandroiddemo.activities.BreezeMapStyleActivity;
 import com.baato.baatoandroiddemo.activities.ComponentNavigationActivity;
 import com.baato.baatoandroiddemo.activities.ComponentNavigationHelperActivity;
 import com.baato.baatoandroiddemo.activities.MonochromeMapStyleActivity;
@@ -112,9 +113,12 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case 5:
                 break;
             case 6:
-                intent = new Intent(context, MonochromeMapStyleActivity.class);
+                intent = new Intent(context, BreezeMapStyleActivity.class);
                 break;
             case 7:
+                intent = new Intent(context, MonochromeMapStyleActivity.class);
+                break;
+            case 8:
                 intent = new Intent(context, RetroMapStyleActivity.class);
                 break;
             default:

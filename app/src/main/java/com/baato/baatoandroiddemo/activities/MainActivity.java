@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(new HomeMenu("Map Styles", HomeMenu.TEXT_TYPE, R.drawable.ic_search));
         list.add(new HomeMenu("", HomeMenu.TEXT_TYPE, R.drawable.ic_search));
 
+        list.add(new HomeMenu("Breeze Map", HomeMenu.MAP_TYPE, R.drawable.breeze));
         list.add(new HomeMenu("Monochrome Map", HomeMenu.MAP_TYPE, R.drawable.monochrome));
         list.add(new HomeMenu("Retro Map", HomeMenu.MAP_TYPE, R.drawable.retro));
         return list;

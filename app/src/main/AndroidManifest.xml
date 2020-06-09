@@ -18,6 +18,8 @@
         <activity
             android:name="com.baato.baatoandroiddemo.activities.RetroMapStyleActivity"/>
         <activity
+            android:name="com.baato.baatoandroiddemo.activities.BreezeMapStyleActivity"/>
+        <activity
             android:name="com.baato.baatoandroiddemo.activities.MonochromeMapStyleActivity"/>
         <activity
             android:name="com.baato.baatoandroiddemo.activities.LocationPickerActivity"/>
