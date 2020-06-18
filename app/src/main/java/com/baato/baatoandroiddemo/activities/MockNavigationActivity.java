@@ -112,7 +112,7 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
             //remove mapbox attribute
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
-            mapboxMap.setStyle("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+            mapboxMap.setStyle(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token),
                     style -> {
                         this.mapboxMap = mapboxMap;
                         initLocationEngine();

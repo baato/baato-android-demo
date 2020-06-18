@@ -183,7 +183,7 @@ public class MockNavigationHelperActivity extends AppCompatActivity implements O
         //remove mapbox attribute
         mapboxMap.getUiSettings().setAttributionEnabled(false);
         mapboxMap.getUiSettings().setLogoEnabled(false);
-        mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/monochrome?key=" + getString(R.string.baato_access_token),
+        mapboxMap.setStyleUrl(getString(R.string.base_url) + "styles/monochrome?key=" + getString(R.string.baato_access_token),
                 style -> {
                     mapboxMap.setCameraPosition(new CameraPosition.Builder()
                             .target(new LatLng(origin.latitude(), origin.longitude()))

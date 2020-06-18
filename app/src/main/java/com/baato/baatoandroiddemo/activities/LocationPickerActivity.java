@@ -52,7 +52,7 @@ public class LocationPickerActivity extends AppCompatActivity {
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
             //add your map style url here
-            mapboxMap.setStyleUrl("http://baato.io/api/v1/styles/retro?key=" + getString(R.string.baato_access_token),
+            mapboxMap.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token),
                     style -> {
                         this.mapboxMap = mapboxMap;
                         mapView.setVisibility(View.VISIBLE);

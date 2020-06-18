@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.8.1'
 
     //Baato library
-    implementation 'com.github.baato:java-client:1.0.7'
+    implementation 'com.github.baato:java-client:1.0.9'
 
     //baatoNavigationLibrary
     implementation 'com.github.baato.navigation-sdk:baato-navigation-android:0.1.3'
