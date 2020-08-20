@@ -103,7 +103,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
         bottomText = findViewById(R.id.bottomText);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
+        Mapbox.getInstance(this, null);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
         {

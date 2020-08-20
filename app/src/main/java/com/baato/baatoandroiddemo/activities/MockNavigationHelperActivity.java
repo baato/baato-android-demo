@@ -132,7 +132,7 @@ public class MockNavigationHelperActivity extends AppCompatActivity implements O
         // For styling the InstructionView
         setTheme(R.style.CustomInstructionView);
         setContentView(R.layout.activity_component_navigation);
-        Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_token));
+        Mapbox.getInstance(getApplicationContext(), null);
 
         mapView = findViewById(R.id.mapView);
         navigationLayout = findViewById(R.id.componentNavigationLayout);
@@ -156,7 +156,7 @@ public class MockNavigationHelperActivity extends AppCompatActivity implements O
 
         MapboxNavigationOptions options = MapboxNavigationOptions.builder()
                 .build();
-        navigation = new MapboxNavigation(this, getString(R.string.mapbox_token), options);
+        navigation = new MapboxNavigation(this, null, options);
         navigation.addMilestone(new RouteMilestone.Builder()
                 .setIdentifier(BEGIN_ROUTE_MILESTONE)
                 .setInstruction(new BeginRouteInstruction())

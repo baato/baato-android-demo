@@ -44,7 +44,7 @@ public class LocationPickerActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
+        Mapbox.getInstance(this, null);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(mapboxMap ->
         {
