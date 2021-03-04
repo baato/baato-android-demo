@@ -419,7 +419,7 @@ public class MockNavigationHelperActivity extends AppCompatActivity implements O
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
                         com.baato.baatolibrary.models.NavResponse navResponse = directionResponse.getData().get(0);
-                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode);
+                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode, getApplicationContext());
                         DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
                         route = directionsResponse.routes().get(0);
                         handleRoute(directionsResponse, isOffRoute);

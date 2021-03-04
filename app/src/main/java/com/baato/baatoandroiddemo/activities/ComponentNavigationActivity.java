@@ -399,7 +399,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
                                 "  Time: " + TimeCalculation.giveMeTimeFromSecondsFormat(time));
                         bottomInfoLayout.setVisibility(VISIBLE);
 
-                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode);
+                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode, getApplicationContext());
                         DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
                         currentRoute = directionsResponse.routes().get(0);
 

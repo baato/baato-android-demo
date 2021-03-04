@@ -55,6 +55,7 @@ import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress;
 
 import java.util.List;
 import java.util.Locale;
+import com.mapbox.services.android.navigation.ui.v5.SoundButton;
 
 public class ComponentNavigationHelperActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener, ProgressChangeListener,
         MilestoneEventListener, OffRouteListener {
@@ -91,6 +92,7 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
     private Point origin;
     DirectionsResponse directionsResponse;
     Location initatingLoacation;
+    private SoundButton soundButton;
 
     private enum MapState {
         INFO,
@@ -109,7 +111,7 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
         navigationLayout = findViewById(R.id.componentNavigationLayout);
         instructionView = findViewById(R.id.instructionView);
         summaryBottomSheet = findViewById(R.id.summaryBottomSheet);
-
+        soundButton = instructionView.findViewById(R.id.soundLayout);
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -167,6 +169,22 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
         // Start navigation
         adjustMapPaddingForNavigation();
         navigation.startNavigation(route);
+
+        if (soundButton.hasOnClickListeners()) {
+            soundButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    soundButton.toggleMute();
+                }
+            });
+        } else {
+            soundButton.addOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    soundButton.toggleMute();
+                }
+            });
+        }
     }
 
     /*
@@ -421,7 +439,7 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
                         double distanceInKm = navResponse.getDistanceInMeters() / 1000;
                         long time = navResponse.getTimeInMs() / 1000;
 
-                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode);
+                        String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode, getApplicationContext());
                         DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
                         route = directionsResponse.routes().get(0);
                         handleRoute(directionsResponse, isOffRoute);
