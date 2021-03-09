@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -105,7 +108,7 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
         // For styling the InstructionView
         setTheme(R.style.CustomInstructionView);
         setContentView(R.layout.activity_component_navigation);
-        Mapbox.getInstance(getApplicationContext(), "pk.xxx");
+        Mapbox.getInstance(getApplicationContext(),null);
 
         mapView = findViewById(R.id.mapView);
         navigationLayout = findViewById(R.id.componentNavigationLayout);
@@ -124,6 +127,16 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
             // and get whatever type user account id is
         }
 
+        //add your baato logo attribution here
+        final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+        params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+        params.setMargins(12, 12, 12, 12);
+        ImageView imageview = new ImageView(this);
+        imageview.setImageResource(R.drawable.baato_logo);
+        imageview.setLayoutParams(params);
+        mapView.addView(imageview);
+
+        mapView.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.onCreate(savedInstanceState);
 
         // Will call onMapReady
@@ -136,6 +149,7 @@ public class ComponentNavigationHelperActivity extends AppCompatActivity impleme
         //remove mapbox attribute
         mapboxMap.getUiSettings().setAttributionEnabled(false);
         mapboxMap.getUiSettings().setLogoEnabled(false);
+
         mapboxMap.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token),
                 style -> {
                     mapboxMap.setCameraPosition(new CameraPosition.Builder()

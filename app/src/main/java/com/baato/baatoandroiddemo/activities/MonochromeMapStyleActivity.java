@@ -2,7 +2,10 @@ package com.baato.baatoandroiddemo.activities;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,20 +29,25 @@ public class MonochromeMapStyleActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
-        mapView.onCreate(savedInstanceState);
+        Mapbox.getInstance(this,null);
+        //add your map style url here
+        mapView.setStyleUrl(getString(R.string.base_url)+ "styles/monochrome?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
         {
             //remove mapbox attribute
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
-            //add you map style url here
-            mapboxMap.setStyle(getString(R.string.base_url)+ "styles/monochrome?key=" + getString(R.string.baato_access_token),
-                    style -> {
-                        bottomInfoLayout.setText(Html.fromHtml("<b>Monochrome Map</b>" + " from Baato.io"));
-                        bottomInfoLayout.setVisibility(View.VISIBLE);
-                    });
+
+            //add your baato logo attribution here
+            final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+            params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            params.setMargins(12, 12, 12, 12);
+            ImageView imageview = new ImageView(this);
+            imageview.setImageResource(R.drawable.baato_logo);
+            imageview.setLayoutParams(params);
+            mapView.addView(imageview);
         });
+        mapView.onCreate(savedInstanceState);
 
     }
 

@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.baatoandroiddemo.R;
@@ -26,20 +29,33 @@ public class RetroMapStyleActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
-        mapView.onCreate(savedInstanceState);
+        Mapbox.getInstance(this, null);
+        //add your map style url here
+        mapView.setStyleUrl(getString(R.string.base_url)+ "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
         {
             //remove mapbox attribute
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
+
+            //add your baato logo attribution here
+            final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+            params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            params.setMargins(12, 12, 12, 12);
+            ImageView imageview = new ImageView(this);
+            imageview.setImageResource(R.drawable.baato_logo);
+            imageview.setLayoutParams(params);
+            mapView.addView(imageview);
+
+
             //add your map style url here
-            mapboxMap.setStyle(getString(R.string.base_url)+ "styles/retro?key=" + getString(R.string.baato_access_token),
-                    style -> {
-                        bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
-                        bottomInfoLayout.setVisibility(View.VISIBLE);
-                    });
+//            mapboxMap.setStyle(getString(R.string.base_url)+ "styles/retro?key=" + getString(R.string.baato_access_token),
+//                    style -> {
+//                        bottomInfoLayout.setText(Html.fromHtml("<b>Retro Map</b>" + " from Baato.io"));
+//                        bottomInfoLayout.setVisibility(View.VISIBLE);
+//                    });
         });
+        mapView.onCreate(savedInstanceState);
 
     }
 

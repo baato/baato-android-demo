@@ -10,8 +10,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,13 +106,24 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
         bottomText = findViewById(R.id.bottomText);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
-        mapView.onCreate(savedInstanceState);
+        Mapbox.getInstance(this,null);
+        //add your map style url here
+        mapView.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
         {
             //remove mapbox attribute
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
+
+            //add your baato logo attribution here
+            final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+            params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            params.setMargins(12, 12, 12, 12);
+            ImageView imageview = new ImageView(this);
+            imageview.setImageResource(R.drawable.baato_logo);
+            imageview.setLayoutParams(params);
+            mapView.addView(imageview);
+
             mapboxMap.setStyle(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token),
                     style -> {
                         this.mapboxMap = mapboxMap;
@@ -121,6 +135,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
                         });
                     });
         });
+        mapView.onCreate(savedInstanceState);
     }
 
     private void initLocationLayer() {

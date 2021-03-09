@@ -7,7 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.baatoandroiddemo.R;
@@ -44,13 +47,24 @@ public class LocationPickerActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this, getString(R.string.mapbox_token));
-        mapView.onCreate(savedInstanceState);
+        Mapbox.getInstance(this,null);
+        //set your map style url here
+        mapView.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
         {
             //remove mapbox attribute
             mapboxMap.getUiSettings().setAttributionEnabled(false);
             mapboxMap.getUiSettings().setLogoEnabled(false);
+
+            //add your baato logo attribution here
+            final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+            params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+            params.setMargins(12, 12, 12, 12);
+            ImageView imageview = new ImageView(this);
+            imageview.setImageResource(R.drawable.baato_logo);
+            imageview.setLayoutParams(params);
+            mapView.addView(imageview);
+
             //add your map style url here
             mapboxMap.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token),
                     style -> {
@@ -60,6 +74,7 @@ public class LocationPickerActivity extends AppCompatActivity {
                         bottomInfoLayout.setVisibility(View.VISIBLE);
                     });
         });
+        mapView.onCreate(savedInstanceState);
     }
 
     // Initialize, but don't show, a symbol for the marker icon which will represent a selected location.

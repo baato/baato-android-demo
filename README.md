@@ -13,11 +13,33 @@ This demo app requires a Baato account and a Baato access token. Obtain your acc
 ```
 <string name="baato_access_token">PASTE_YOUR_TOKEN_HERE</string>
 ```
-#### 2. Setting the Mapbox access token
-This demo app uses Mapbox sdk to load maps, which require a Mapbox account and a Mapbox access token. Obtain a free access token on the [Mapbox account page](https://account.mapbox.com/access-tokens/). Paste your access token into ``` strings.xml```.
+#### 2. Baato logo attribution
+NOTE: We highly request you to include Baato logo in the map view while using any of our Baato map styles. So, please download the Baato logo from [this link](https://i.postimg.cc/k5DpLQKQ/baato-Logo.png). Add the downloaded image to your res/drawable folder and follow the steps as mentioned in the code snippet below.
 
 ```
-<string name="mapbox_token">PASTE_YOUR_TOKEN_HERE</string>
+    mapView = findViewById(R.id.mapView);
+
+    Mapbox.getInstance(this, null);
+
+    //add your map style url here
+    mapView.setStyleUrl(getString(R.string.base_url)+ "styles/retro?key=" + getString(R.string.baato_access_token));
+    mapView.getMapAsync(mapboxMap ->
+    {
+        //remove mapbox attribute
+        mapboxMap.getUiSettings().setAttributionEnabled(false);
+        mapboxMap.getUiSettings().setLogoEnabled(false);
+
+        //add your baato logo attribution here
+        final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(250, 104);
+        params.gravity = Gravity.BOTTOM | Gravity.LEFT;
+        params.setMargins(12, 12, 12, 12);
+        ImageView imageview = new ImageView(this);
+        imageview.setImageResource(R.drawable.baato_logo);
+        imageview.setLayoutParams(params);
+        mapView.addView(imageview);
+
+    });
+    mapView.onCreate(savedInstanceState);
 ```
 If you're still having issues, please feel free to contact us at support@baato.io.
 

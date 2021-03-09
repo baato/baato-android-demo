@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.baato.baatoandroiddemo.activities.LocationPickerActivity">
+    tools:context="com.baato.baatoandroiddemo.activities.LocationPickerActivity"
+    android:orientation="vertical">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         mapbox:mapbox_cameraTargetLat="27.7084"
         mapbox:mapbox_cameraTargetLng="85.3206"
         mapbox:mapbox_cameraZoom="13"
@@ -30,4 +32,4 @@
         app:layout_anchor="@id/mapView"
         app:layout_anchorGravity="bottom" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>
