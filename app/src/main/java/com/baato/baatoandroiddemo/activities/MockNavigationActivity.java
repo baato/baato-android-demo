@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -72,6 +73,7 @@ import java.util.List;
 
 import static android.view.View.VISIBLE;
 import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
+//import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
 
 public class MockNavigationActivity extends AppCompatActivity implements PermissionsListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -406,7 +408,10 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
                     @Override
                     public void onSuccess(DirectionsAPIResponse directionResponse) {
                         // If the routing returns a result, we take the first in the list and show the route.
+                        Log.d("TAG", "onSuccess: "+directionResponse.toString());
                         NavResponse navResponse = directionResponse.getData().get(0);
+                        Log.d("TAG", "onSuccess:directions "+navResponse);
+                        Log.d("TAG", "onSuccess:directions "+navResponse.toString());
                         initRouteCoordinates(navResponse.getEncoded_polyline());
                         double distanceInKm = navResponse.getDistanceInMeters() / 1000;
                         long time = navResponse.getTimeInMs() / 1000;

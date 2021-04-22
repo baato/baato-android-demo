@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/box_background_normal" android:state_pressed="true" /> <!-- pressed -->
+    <item android:drawable="@drawable/box_background_normal" android:state_focused="true" /> <!-- focused -->
+    <item android:drawable="@drawable/box_background_normal" /> <!-- default -->
+</selector>

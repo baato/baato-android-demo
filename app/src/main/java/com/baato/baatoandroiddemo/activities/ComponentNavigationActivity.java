@@ -68,6 +68,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static android.view.View.VISIBLE;
 import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
 
@@ -454,8 +455,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
     private void initRouteCoordinates(String encoded_polyline) {
         points = new ArrayList<>();
         List<LatLng> bboxPoints = new ArrayList<>();
-        for (List<Double> coordinates :
-                decodePolyline(encoded_polyline, false)) {
+        for (List<Double> coordinates : decodePolyline(encoded_polyline, false)) {
             points.add(Point.fromLngLat(coordinates.get(1), coordinates.get(0)));
             bboxPoints.add(new LatLng(coordinates.get(0), coordinates.get(1)));
         }

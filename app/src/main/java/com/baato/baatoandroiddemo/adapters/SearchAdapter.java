@@ -12,10 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.baato.baatolibrary.models.SearchDataModel;
 import com.example.baatoandroiddemo.R;
 import com.baato.baatolibrary.models.Place;
 import com.baato.baatolibrary.models.PlaceAPIResponse;
-import com.baato.baatolibrary.models.SearchDataModel;
+//import com.baato.baatolibrary.models.SearchDataModel;
 import com.baato.baatolibrary.services.BaatoPlace;
 
 import java.util.List;

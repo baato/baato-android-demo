@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -112,6 +113,7 @@ public class SearchActivity extends AppCompatActivity {
                         // get the list of search results and add it to the recycler view adapter
                         if (places.getData() != null && places.getData().size() > 0) {
                             hideErrorMessage();
+                            Log.d("TAG", "onSuccess: "+places.getData());
                             recyclerView.setAdapter(new SearchAdapter(places.getData(), SearchActivity.this));
                         } else
                             showErrorMessage("Empty results!\nCouldn't find any matching results for the " + query);

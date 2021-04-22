@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -131,7 +132,7 @@ public class LocationPickerActivity extends AppCompatActivity {
                 .withListener(new BaatoReverse.BaatoReverseRequestListener() {
                     @Override
                     public void onSuccess(PlaceAPIResponse places) {
-
+                        Log.d("TAG", "onSuccess:places "+places.toString());
                         // If the geocoder returns a result, we take the first in the list and show the address with the place name.
                         if (!places.getData().isEmpty()) {
                             Place place = places.getData().get(0);

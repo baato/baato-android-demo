@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="com.baato.baatoandroiddemo.activities.FeedbackActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="Title"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_modified_states"
+            android:hint="@string/base_url"
+            android:padding="@dimen/medium_margin"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="2dp"
+            android:text="Description"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:inputType="textMultiLine"
+            android:background="@drawable/edittext_modified_states"
+            android:hint="@string/base_url"
+            android:padding="@dimen/medium_margin"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableLeft="@drawable/ic_baseline_image_24"
+            android:drawablePadding="8dp"
+            app:drawableTint="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:text="Add photos for reference"
+            android:textColor="@color/colorBlack" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/edittext_modified_states"
+                android:hint="your name"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/colorGrey"
+                android:padding="@dimen/medium_margin"
+                android:textSize="12sp"
+                android:layout_marginRight="1dp"
+                android:textColor="@color/colorBlack" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:background="@drawable/edittext_modified_states"
+                android:hint="your email"
+                android:textSize="12sp"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/colorGrey"
+                android:padding="@dimen/medium_margin"
+                android:textColor="@color/colorBlack" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="Submit"
+            android:textStyle="normal"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
