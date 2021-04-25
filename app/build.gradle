@@ -49,9 +49,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     //baatoNavigationLibrary
-    implementation 'com.github.baato.navigation-sdk:baato-navigation-android:0.2.1-beta.1'
-    implementation 'com.github.baato.navigation-sdk:baato-navigation-android-ui:0.2.1-beta.1'
-
+    implementation 'com.github.baato.navigation-sdk:baato-navigation-android:0.2.1-beta.4'
+    implementation 'com.github.baato.navigation-sdk:baato-navigation-android-ui:0.2.1-beta.4'
+//    implementation 'com.github.baato:navigation-sdk:0.2.1-beta.2'
     //for location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
