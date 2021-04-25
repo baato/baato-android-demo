@@ -7,6 +7,6 @@
     <string name="user_location_permission_not_granted">Location permission not granted</string>
     <string name="user_location_permission_explanation">Required to get your location</string>
     <string name="error_valid_route_not_found">valid route not found</string>
-    <string name="baato_access_token">{your_baato_access_token_here}</string>
+    <string name="baato_access_token">{your-baato-access-token}</string>
     <string name="mapbox_token">pk.xxx</string>
 </resources>

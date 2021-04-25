@@ -2,6 +2,9 @@ package com.baato.baatoandroiddemo.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -9,7 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -70,6 +76,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static android.view.View.VISIBLE;
 import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
 
@@ -97,6 +105,7 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
     private NavigationMapRoute navigationMapRoute;
     private MarkerOptions marker;
     private Icon startIcon, destinationIcon;
+    private DirectionsResponse directionsResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +117,7 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
         bottomText = findViewById(R.id.bottomText);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this,null);
+        Mapbox.getInstance(this, null);
         //add your map style url here
         mapView.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
@@ -196,7 +205,13 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.PHONE_STATE_PERMISSION_REQUEST) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                displayPhoneStateRequiredDialog(this);
+            } else
+                callTurnByTurnNavigationActivity();
+        } else
+            permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -210,6 +225,28 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
             Toast.makeText(this, "Please wait ...", Toast.LENGTH_LONG).show();
         getMyLocation();
     }
+
+    public static void displayPhoneStateRequiredDialog(Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Turn by turn navigation task requires PHONE_STATE_PERMISSION enabled. Please permit the permission through "
+                + "Settings screen.\n\nSelect Permissions -> Enable permission");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Permit Manually", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                intent.setData(uri);
+                context.startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
 
     private synchronized void setUpGClient() {
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -269,6 +306,7 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
 
                                     mylocation = LocationServices.FusedLocationApi
                                             .getLastLocation(googleApiClient);
+                                    Log.d("TAG", "getMyLocation: " + mylocation);
                                     if (mylocation != null) {
                                         originPoint = Point.fromLngLat(mylocation.getLongitude(), mylocation.getLongitude());
                                         addOriginMarker(new LatLng(mylocation.getLatitude(), mylocation.getLongitude()));
@@ -417,7 +455,8 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
                         bottomInfoLayout.setVisibility(VISIBLE);
 
                         String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode, getApplicationContext());
-                        DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
+                        Timber.d("onSuccess:directions " + parsedNavigationResponse);
+                        directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
                         currentRoute = directionsResponse.routes().get(0);
 
                         //show the route from here
@@ -425,11 +464,8 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
 
                         btnGo.setOnClickListener(v -> {
                             //start Navigation using mock location engine
-                            Intent intent = new Intent(MockNavigationActivity.this, MockNavigationHelperActivity.class);
-                            intent.putExtra("Route", directionsResponse);
-                            intent.putExtra("origin", origin);
-                            intent.putExtra("lastLocation", mylocation);
-                            startActivity(intent);
+                            //Navigation sdk requires PHONE_STATE_PERMISSION for target sdk versions 30 and above
+                            checkPhoneStatePermission();
                         });
                     }
 
@@ -441,6 +477,23 @@ public class MockNavigationActivity extends AppCompatActivity implements Permiss
                     }
                 })
                 .doRequest();
+    }
+
+    private void checkPhoneStatePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int res = checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE);
+            if (res != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_PHONE_STATE}, Constants.PHONE_STATE_PERMISSION_REQUEST);
+            } else callTurnByTurnNavigationActivity();
+        }
+    }
+
+    private void callTurnByTurnNavigationActivity() {
+        Intent intent = new Intent(MockNavigationActivity.this, MockNavigationHelperActivity.class);
+        intent.putExtra("Route", directionsResponse);
+        intent.putExtra("origin", originPoint);
+        intent.putExtra("lastLocation", mylocation);
+        startActivity(intent);
     }
 
     private void navMapRoute(DirectionsRoute myRoute) {
