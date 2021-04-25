@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -70,6 +71,7 @@ import java.util.List;
 
 
 import static android.view.View.VISIBLE;
+import static com.baato.baatoandroiddemo.activities.MockNavigationActivity.displayPhoneStateRequiredDialog;
 import static com.baato.baatolibrary.utilities.BaatoUtil.decodePolyline;
 
 public class ComponentNavigationActivity extends AppCompatActivity implements PermissionsListener, GoogleApiClient.ConnectionCallbacks,
@@ -96,6 +98,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
     private NavigationMapRoute navigationMapRoute;
     private MarkerOptions marker;
     private Icon startIcon, destinationIcon;
+    private DirectionsResponse directionsResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +110,7 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
         bottomText = findViewById(R.id.bottomText);
         bottomInfoLayout = findViewById(R.id.bottomInfoLayout);
 
-        Mapbox.getInstance(this,null);
+        Mapbox.getInstance(this, null);
         //add your map style url here
         mapView.setStyleUrl(getString(R.string.base_url) + "styles/retro?key=" + getString(R.string.baato_access_token));
         mapView.getMapAsync(mapboxMap ->
@@ -195,7 +198,13 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constants.PHONE_STATE_PERMISSION_REQUEST) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                displayPhoneStateRequiredDialog(this);
+            } else
+                callTurnByTurnNavigationActivity();
+        } else
+            permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -416,20 +425,15 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
                         bottomInfoLayout.setVisibility(VISIBLE);
 
                         String parsedNavigationResponse = BaatoRouting.getParsedNavResponse(directionResponse, navigationMode, getApplicationContext());
-                        DirectionsResponse directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
+                        directionsResponse = DirectionsResponse.fromJson(parsedNavigationResponse);
                         currentRoute = directionsResponse.routes().get(0);
 
                         //show the route from here
                         navMapRoute(currentRoute);
 
                         btnGo.setOnClickListener(v -> {
-                            //start Navigation
-                            Intent intent = new Intent(ComponentNavigationActivity.this, ComponentNavigationHelperActivity.class);
-                            intent.putExtra("Route", directionsResponse);
-                            intent.putExtra("origin", origin);
-                            intent.putExtra("lastLocation", mylocation);
-                            intent.putExtra("destination", destination);
-                            startActivity(intent);
+                            //Navigation sdk requires PHONE_STATE_PERMISSION for target sdk versions 30 and above
+                            checkPhoneStatePermission();
                         });
                     }
 
@@ -441,6 +445,24 @@ public class ComponentNavigationActivity extends AppCompatActivity implements Pe
                     }
                 })
                 .doRequest();
+    }
+
+    private void checkPhoneStatePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            int res = checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE);
+            if (res != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_PHONE_STATE}, Constants.PHONE_STATE_PERMISSION_REQUEST);
+            } else callTurnByTurnNavigationActivity();
+        }
+    }
+
+    private void callTurnByTurnNavigationActivity() {
+        Intent intent = new Intent(this, ComponentNavigationHelperActivity.class);
+        intent.putExtra("Route", directionsResponse);
+        intent.putExtra("origin", originPoint);
+        intent.putExtra("lastLocation", mylocation);
+        intent.putExtra("destination", destinationPoint);
+        startActivity(intent);
     }
 
     private void navMapRoute(DirectionsRoute myRoute) {
